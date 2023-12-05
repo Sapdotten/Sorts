@@ -1,7 +1,8 @@
 #ifndef SRC_SORTS_SORTS_CC
 #define SRC_SORTS_SORTS_CC
-#include "../include/stats.h"
 #include <vector>
+
+#include "../include/stats.h"
 namespace Sorts {
 Stats InsertSort(std::vector<int> &arr) {
   Stats stats;
@@ -15,6 +16,7 @@ Stats InsertSort(std::vector<int> &arr) {
       stats.comparison_count++;
       stats.copy_count++;
     }
+    stats.comparison_count++;
     arr.at(j) = elem;
     stats.copy_count++;
   }
@@ -41,16 +43,34 @@ Stats _QuickSort(std::vector<int> &arr, int start_ind, int end) {
       ++start;
     stats.comparison_count++;
   }
-    stats+=_QuickSort(arr, start_ind, pivot-1);
-    stats+=_QuickSort(arr, pivot + 1, end);
-    return stats;
-  }
+  stats += _QuickSort(arr, start_ind, pivot - 1);
+  stats += _QuickSort(arr, pivot + 1, end);
+  return stats;
+}
 
-
-Stats QuickSort(std::vector<int> &arr) { 
+Stats QuickSort(std::vector<int> &arr) {
   return _QuickSort(arr, 0, arr.size() - 1);
 }
 
+int GetNextGap(int gap) { return int(gap / 1.3); }
 
+Stats CombSort(std::vector<int> &arr) {
+  Stats stats;
+  int gap = arr.size();
+  while (gap > 1) {
+    gap = GetNextGap(gap);
+    for (int i = 0; i < arr.size() - gap; ++i) {
+      if (arr.at(i) > arr.at(i + gap)) {
+        int tmp = arr.at(i);
+        arr.at(i) = arr.at(i + gap);
+        arr.at(i + gap) = tmp;
+        stats.copy_count += 3;
+      }
+      stats.comparison_count++;
+    }
+  }
+  return stats;
 }
+
+}  // namespace Sorts
 #endif
