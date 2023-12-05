@@ -15,4 +15,4 @@ target_include_directories(sorts PUBLIC "../include/")
 
 add_executable(${PROJECT_NAME} "../src/main.cpp")
 target_link_libraries(${PROJECT_NAME} sorts)
-target_link_libraries(sorts "../src/sorts/sorts.cc" "../src/sorts/stats.cc")
+#target_link_libraries(sorts "../src/sorts/sorts.cc" "../src/sorts/stats.cc")
