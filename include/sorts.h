@@ -6,6 +6,7 @@
 namespace Sorts {
 
 Stats InsertSort(std::vector<int> &arr);
+Stats QuickSort(std::vector<int> &arr);
 
 }  // namespace Sorts
 #endif
