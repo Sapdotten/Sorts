@@ -45,7 +45,7 @@ Stats _QuickSort(std::vector<int>& arr, int left, int right) {
         std::swap(arr[i], arr[j]);
         i++;
         j--;
-        stats.copy_count += 2;
+        stats.copy_count += 3;
       }
     } while (i <= j);
     stats+=_QuickSort(arr, left, j);
