@@ -7,6 +7,7 @@ namespace Sorts {
 Stats InsertSort(std::vector<int> &arr) {
   Stats stats;
   for (size_t i = 1; i < arr.size(); ++i) {
+    
     int elem = arr.at(i);
     stats.copy_count++;
     size_t j = i;
@@ -23,34 +24,38 @@ Stats InsertSort(std::vector<int> &arr) {
   return stats;
 }
 
-Stats _QuickSort(std::vector<int> &arr, int start_ind, int end) {
-  if (start_ind >= end) return Stats(0, 0);
+Stats _QuickSort(std::vector<int>& arr, int left, int right) {
   Stats stats;
-  size_t start = start_ind;
-  int pivot = end;
-  while (start < pivot) {
-    if (arr.at(start) > arr.at(pivot)) {
-      int tmp = arr.at(start);
-      stats.copy_count++;
-      for (size_t j = start + 1; j <= pivot; ++j) {
-        arr.at(j - 1) = arr.at(j);
-        stats.copy_count++;
+  if (left < right) {
+    int pivot = arr[(left + right) / 2];
+    stats.copy_count++;
+    int i = left;
+    int j = right;
+    do {
+      while (arr[i] < pivot) {
+        i++;
+        stats.comparison_count++;
       }
-      arr.at(pivot) = tmp;
-      stats.copy_count++;
-      --pivot;
-    } else
-      ++start;
-    stats.comparison_count++;
+      stats.comparison_count++;
+      while (arr[j] > pivot) {
+        j--;
+        stats.comparison_count++;
+      }
+      if (i <= j) {
+        std::swap(arr[i], arr[j]);
+        i++;
+        j--;
+        stats.copy_count += 2;
+      }
+    } while (i <= j);
+    stats+=_QuickSort(arr, left, j);
+    stats+=_QuickSort(arr, i, right);
+    return stats;
   }
-  stats += _QuickSort(arr, start_ind, pivot - 1);
-  stats += _QuickSort(arr, pivot + 1, end);
-  return stats;
+  return Stats(0, 0);
 }
 
-Stats QuickSort(std::vector<int> &arr) {
-  return _QuickSort(arr, 0, arr.size() - 1);
-}
+Stats QuickSort(std::vector<int>& arr) { return _QuickSort(arr, 0, arr.size() - 1); }
 
 int GetNextGap(int gap) { return int(gap / 1.3); }
 
